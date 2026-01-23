@@ -1,0 +1,159 @@
+LAB 3
+QUES 1:
+PROGRAM:
+
+import java.util.Scanner; 
+
+class RoomServiceTask implements Runnable {
+    private String taskname;
+    private int duration;
+
+    public RoomServiceTask(String taskname, int duration) {
+        this.taskname = taskname;
+        this.duration = duration;
+    }
+
+    @Override 
+    public void run() {
+        try {
+            System.out.println("START " + taskname + " is in progress");
+            Thread.sleep(duration);
+            System.out.println("END " + taskname + " is completed.");
+        } catch (InterruptedException e) { 
+            System.out.println(" task was interrupted.");
+        }
+    }
+}
+
+public class hotelmanagementsystem {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        
+        System.out.print("No. service requests to create: ");
+        int numtasks = sc.nextInt();
+        sc.nextLine();
+
+        Thread[] threads = new Thread[numtasks];
+
+        for (int i = 0; i < numtasks; i++) {
+            System.out.println("\nRequest :" + (i + 1));
+            System.out.print("Enter service name: ");
+            String name = sc.nextLine();
+            
+            System.out.print("Enter time in seconds: ");
+            int time = sc.nextInt() * 1000; 
+            sc.nextLine();
+
+            RoomServiceTask task = new RoomServiceTask(name, time);
+            threads[i] = new Thread(task);
+        }
+
+        System.out.println("\n Initiating services concurrently\n");
+        for (Thread t : threads) {
+            t.start();
+        }
+
+        System.out.println("Main thread is free for other tasks.\n");
+        sc.close();
+    }
+}
+OUTPUT:
+No. service requests to create: 3
+
+Request :1
+Enter service name: cleaning
+Enter time in seconds: 3
+
+Request :2
+Enter service name: food
+Enter time in seconds: 2
+
+Request :3
+Enter service name: repair
+Enter time in seconds: 5
+
+ Initiating services concurrently
+
+Main thread is free for other tasks.
+
+START repair is in progress
+START food is in progress
+START cleaning is in progress
+END food is completed.
+END cleaning is completed.
+END repair is completed.
+-------------------------------------------------------------------------------------------------------------------------------
+QUES 2:
+PROGRAM:
+import java.util.Scanner;
+class Orderprocessor implements Runnable{
+    private String customername;
+    private String productname;
+    public Orderprocessor(String customername, String productname){
+        this.customername = customername;
+        this.productname = productname;
+    }
+    @Override
+    public void run(){
+        try{
+            System.out.println("NEW ORDER : processing for "+ customername +"'s "+productname);
+            System.out.println("validation order for "+customername);
+            Thread.sleep(1500);
+            System.out.println("processing payment for "+productname);
+            Thread.sleep(2000);
+            System.out.println("shipped "+productname);
+        }
+        catch(InterruptedException e){
+            System.out.println(productname+"was cancelled due to error");
+        }
+    }
+}
+public class onlineordersystem_ques2_lab3{
+    public static void main(String[] args){
+        Scanner sc=new Scanner(System.in);
+        System.out.println("enter number of orders:");
+        int count_orders = sc.nextInt();
+        sc.nextLine();
+        Thread[] orderThreads = new Thread[count_orders];
+        for(int i=0;i<count_orders;i++){
+            System.out.println("order "+(i+1));
+            System.out.println("customer name:");
+            String name = sc.nextLine();
+            System.out.println("product name:");
+            String product = sc.nextLine();
+            Orderprocessor task = new Orderprocessor(name,product);
+            orderThreads[i] = new Thread(task);
+        }
+        System.out.println("\nstarting order processing\n");
+        for(Thread t: orderThreads){
+            t.start();
+        }
+        sc.close();
+    }
+    
+}
+
+OUTPUT:
+enter number of orders:
+2
+order 1
+customer name:
+cj
+product name:
+maggi
+order 2
+customer name:
+kj
+product name:
+ramen
+
+starting order processing
+
+NEW ORDER : processing for kj's ramen
+validation order for kj
+NEW ORDER : processing for cj's maggi
+validation order for cj
+processing payment for ramen
+processing payment for maggi
+shipped ramen
+shipped maggi
