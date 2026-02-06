@@ -1,0 +1,7 @@
+input:
+You’ll notice we use int character. This is because the .read() method needs a way to signal that it has reached the end of the file. It returns -1 when finished. Since a standard char cannot be negative, Java uses an int to accommodate all valid characters plus that special -1 marker.
+FileReader vs FileWriter
+
+    FineReader: It looks at the file on your disk, identifies the encoding (like UTF-8), and translates the bytes into readable characters for your program.
+
+    File Writer: It takes the characters from your program and translates them back into bytes to be stored on the disk.
